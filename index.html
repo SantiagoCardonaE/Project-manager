@@ -11,6 +11,8 @@ No requiere Node, React, Next.js ni archivos .env. El navegador carga el SDK des
 -->
 <style>*{box-sizing:border-box}body{margin:0;font-family:Arial,Helvetica,sans-serif;background:#f5f7fb;color:#172033}header{padding:22px 28px;background:#fff;border-bottom:1px solid #dfe4ec}h1{margin:0 0 6px;font-size:25px}p{color:#667085}.top{display:flex;justify-content:space-between;gap:20px}.pills{display:flex;gap:10px;flex-wrap:wrap}.pills b{padding:8px 14px;border-radius:20px;font-size:12px}.pills b:nth-child(1){background:#dbeafe;color:#1d4ed8}.pills b:nth-child(2){background:#dcfce7;color:#15803d}.pills b:nth-child(3){background:#fef3c7;color:#b45309}.toolbar{display:flex;gap:12px;align-items:center;flex-wrap:wrap;padding:14px 20px;background:#fff;border-bottom:1px solid #dfe4ec}.save{margin-left:auto;color:#15803d;font-size:12px}button,input{font:inherit}button{border:0;border-radius:7px;padding:9px 13px;background:#eef2f7;cursor:pointer;font-weight:700}.primary{background:#2563eb;color:#fff}.danger{background:#fee2e2;color:#b91c1c}input{border:1px solid #ccd3df;border-radius:7px;padding:7px}.ganttWrap{margin:20px;border:1px solid #dfe4ec;border-radius:10px;background:#fff;overflow:auto}.gantt{display:grid;min-width:max-content}.left{position:sticky;left:0;background:#fff;z-index:4;border-right:1px solid #dfe4ec}.head{height:42px;padding:12px;font-weight:700;border-bottom:1px solid #dfe4ec}.label{height:58px;padding:8px 12px;border-bottom:1px solid #dfe4ec;display:flex;gap:8px;align-items:center}.label>span{width:27px;height:27px;border-radius:50%;background:#e8eefc;color:#2455b8;display:flex;align-items:center;justify-content:center;font-weight:bold;font-size:12px}.label strong{display:block;font-size:13px}.label small{display:block;color:#667085;font-size:11px;margin-top:2px}.days{height:42px;display:flex;border-bottom:1px solid #dfe4ec}.day{width:34px;min-width:34px;text-align:center;font-size:10px;padding-top:13px;border-right:1px solid #eef1f5;color:#7b8494}.gridrow{height:58px;position:relative;border-bottom:1px solid #dfe4ec;background-image:repeating-linear-gradient(to right,transparent 0,transparent 33px,#eef1f5 34px)}.bar{position:absolute;top:14px;height:30px;border-radius:6px;background:#2563eb;color:#fff;font-size:11px;font-weight:700;padding:8px;white-space:nowrap;overflow:hidden}.editor{margin:20px;padding:18px;background:#fff;border:1px solid #dfe4ec;border-radius:10px;overflow:auto}.editor h2{margin-top:0}table{border-collapse:collapse;width:100%;min-width:1050px;font-size:13px}th,td{padding:9px;border-bottom:1px solid #dfe4ec;text-align:left}th{background:#f8fafc}.loading{padding:50px;text-align:center}
 [hidden]{display:none!important}button:disabled{opacity:.55;cursor:wait}.notice{padding:12px 20px;color:#334155;background:#eff6ff}.notice.error{color:#991b1b;background:#fee2e2}.label>div{min-width:0}.label strong,.label small{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:320px}.day{padding-top:7px}.editor input{width:100%;min-width:130px}.empty{padding:25px;color:#667085}@media(max-width:600px){header{padding:18px}h1{font-size:21px}.save{margin-left:0}.ganttWrap,.editor{margin:12px}.left{position:relative}}
+
+.gantt{--panel-width:390px;--panel-current:var(--panel-width)}.gantt.panel-collapsed{--panel-current:60px}.left{min-width:0;position:sticky}.left .head{display:flex;align-items:center;justify-content:space-between;gap:8px;padding:5px 14px 5px 12px}.panel-toggle{padding:5px 8px;font-size:16px;flex-shrink:0}.panel-resizer{position:absolute;right:-5px;top:0;bottom:0;width:10px;cursor:col-resize;touch-action:none;z-index:6}.panel-resizer:hover,.panel-resizer:focus-visible{background:#2563eb66;outline:2px solid #2563eb}.label>span{flex-shrink:0}.label>div{flex:1}.label strong,.label small{max-width:none}.panel-collapsed .head>span,.panel-collapsed .label>div,.panel-collapsed .panel-resizer{display:none}.panel-collapsed .head{justify-content:center;padding:5px}.panel-collapsed .label{padding:8px;justify-content:center}.panel-resizing,.panel-resizing *{cursor:col-resize!important;user-select:none!important}
 </style></head><body>
 <div id="notice" class="notice" role="status" aria-live="polite">Iniciando…</div>
 <main id="project"><header><div class="top"><div>
@@ -44,9 +46,10 @@ function render(){
  const max=addDays(tasks.reduce((a,t)=>t.end_date>a?t.end_date:a,tasks[0].end_date),7);
  const count=duration(min,max), width=34;
  if(count>20000){$('gantt').innerHTML='<p class="empty">El rango es demasiado amplio para dibujar el Gantt. Ajusta las fechas en la tabla.</p>';return;}
- $('gantt').style.gridTemplateColumns='390px '+count*width+'px';
+ $('gantt').style.gridTemplateColumns='var(--panel-current) '+count*width+'px';
  let dates='';for(let i=0;i<count;i++){const date=addDays(min,i);dates+='<div class="day" title="'+date+'">'+date.slice(8)+'<br>'+date.slice(5,7)+'/'+date.slice(2,4)+'</div>';}
- $('gantt').innerHTML='<div class="left"><div class="head">Hito / actividad</div>'+tasks.map((t,i)=>'<div class="label"><span>'+(i+1)+'</span><div><strong title="'+esc(t.name)+'">'+esc(t.name)+'</strong><small title="'+esc(t.description)+'">'+esc(t.description)+'</small></div></div>').join('')+'</div><div class="timeline"><div class="days">'+dates+'</div>'+tasks.map(t=>'<div class="gridrow"><div class="bar" title="'+esc(t.name)+' · '+t.start_date+' / '+t.end_date+'" style="left:'+((duration(min,t.start_date)-1)*width)+'px;width:'+Math.max(8,duration(t.start_date,t.end_date)*width-6)+'px">'+esc(t.name)+'</div></div>').join('')+'</div>';
+ $('gantt').innerHTML='<div class="left"><div class="head"><span>Hito / actividad</span><button type="button" data-panel-toggle class="panel-toggle" aria-label="Contraer panel de hitos" aria-expanded="true">‹</button></div><div class="panel-resizer" role="separator" tabindex="0" aria-label="Ajustar ancho del panel de hitos" aria-orientation="vertical" aria-valuemin="220" aria-valuemax="760" aria-valuenow="390" title="Arrastra para ajustar el ancho o usa las flechas"></div>'+tasks.map((t,i)=>'<div class="label"><span>'+(i+1)+'</span><div><strong title="'+esc(t.name)+'">'+esc(t.name)+'</strong><small title="'+esc(t.description)+'">'+esc(t.description)+'</small></div></div>').join('')+'</div><div class="timeline"><div class="days">'+dates+'</div>'+tasks.map(t=>'<div class="gridrow"><div class="bar" title="'+esc(t.name)+' · '+t.start_date+' / '+t.end_date+'" style="left:'+((duration(min,t.start_date)-1)*width)+'px;width:'+Math.max(8,duration(t.start_date,t.end_date)*width-6)+'px">'+esc(t.name)+'</div></div>').join('')+'</div>';
+ syncPanel();
 }
 $('reload').onclick=()=>run(load);
 $('add').onclick=()=>run(async()=>{const last=tasks[tasks.length-1];const start=addDays(last?.end_date||'2026-09-24',1);check(await db.from('gantt_tasks').insert({position:Math.max(0,...tasks.map(t=>t.position))+1,name:'Nuevo hito',description:'Definir resultado del hito.',start_date:start,end_date:addDays(start,6)}));await load();});
@@ -58,5 +61,32 @@ async function boot(){
  if(!window.supabase){notice('No se pudo cargar la conexión a Supabase. Revisa Internet y recarga la página.',true);return;}
  try{db=window.supabase.createClient(SUPABASE_URL,SUPABASE_PUBLISHABLE_KEY,{auth:{persistSession:false,autoRefreshToken:false,detectSessionInUrl:false}});await run(load);}catch(e){notice(e.message,true);}
 }
+
+const panelStorageKey='inventory-gantt-panel-v1';
+let panelWidth=390,panelCollapsed=false;
+try{const saved=JSON.parse(localStorage.getItem(panelStorageKey)||'null');if(saved){if(Number.isFinite(saved.width))panelWidth=Math.max(220,Math.min(760,saved.width));panelCollapsed=saved.collapsed===true;}}catch{}
+function savePanel(){try{localStorage.setItem(panelStorageKey,JSON.stringify({width:panelWidth,collapsed:panelCollapsed}));}catch{}}
+function syncPanel(){
+ const gantt=$('gantt');gantt.style.setProperty('--panel-width',panelWidth+'px');gantt.classList.toggle('panel-collapsed',panelCollapsed);
+ const toggle=gantt.querySelector('[data-panel-toggle]');
+ if(toggle){const label=panelCollapsed?'Desplegar panel de hitos':'Contraer panel de hitos';toggle.textContent=panelCollapsed?'›':'‹';toggle.title=label;toggle.setAttribute('aria-label',label);toggle.setAttribute('aria-expanded',String(!panelCollapsed));}
+ gantt.querySelector('.panel-resizer')?.setAttribute('aria-valuenow',String(panelWidth));
+}
+function setPanelWidth(value){panelWidth=Math.max(220,Math.min(760,Math.round(value)));syncPanel();}
+$('gantt').addEventListener('click',e=>{if(!e.target.closest('[data-panel-toggle]'))return;panelCollapsed=!panelCollapsed;syncPanel();savePanel();});
+$('gantt').addEventListener('keydown',e=>{
+ if(!e.target.matches('.panel-resizer'))return;
+ const delta={ArrowLeft:-20,ArrowRight:20};
+ if(e.key in delta){e.preventDefault();setPanelWidth(panelWidth+delta[e.key]);savePanel();}
+ else if(e.key==='Home'||e.key==='End'){e.preventDefault();setPanelWidth(e.key==='Home'?220:760);savePanel();}
+});
+$('gantt').addEventListener('pointerdown',e=>{
+ const handle=e.target.closest('.panel-resizer');if(!handle||e.button!==0)return;e.preventDefault();
+ const startX=e.clientX,startWidth=panelWidth;handle.setPointerCapture(e.pointerId);document.body.classList.add('panel-resizing');
+ const move=event=>setPanelWidth(startWidth+event.clientX-startX);
+ const stop=()=>{document.body.classList.remove('panel-resizing');handle.removeEventListener('pointermove',move);handle.removeEventListener('pointerup',stop);handle.removeEventListener('pointercancel',stop);handle.removeEventListener('lostpointercapture',stop);savePanel();};
+ handle.addEventListener('pointermove',move);handle.addEventListener('pointerup',stop);handle.addEventListener('pointercancel',stop);handle.addEventListener('lostpointercapture',stop);
+});
+syncPanel();
 boot();
 </script></body></html>
