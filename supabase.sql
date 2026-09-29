@@ -58,18 +58,18 @@ BEGIN
   (2,'Validar alcance, secciones y responsables','Plan estimado: confirmar cobertura del catálogo, ubicaciones, unidades, responsables y pendientes. Definir corte y tratamiento de entradas y salidas durante el conteo.','2026-09-28','2026-09-30'),
   (3,'Conteo físico por secciones — en curso','Al corte del 28/09 el usuario reporta avance parcial en pintura. El 28/09 representa el corte de seguimiento, no el inicio histórico comprobado. Meta estimada: completar cobertura y materiales fuera de Siigo.','2026-09-28','2026-10-15'),
   (4,'Pintura: completar conteo y pendientes','En curso según reporte del usuario; porcentaje y fecha real de inicio pendientes de verificar en la app. Meta estimada: revisar referencias pendientes, unidades, envases abiertos y materiales agregados.','2026-09-28','2026-10-02'),
-  (5,'Pintura: reconteo y validación del lote','Plan estimado: reconteo de diferencias y validación por responsable. Conciliar únicamente referencias contadas; cerrar el lote cuando todas las excepciones tengan soporte.','2026-10-01','2026-10-06'),
+  (5,'Pintura: reconteo y validación de la sección','Plan estimado: reconteo de diferencias y validación por responsable. Conciliar únicamente referencias contadas; cerrar la sección cuando todas las excepciones tengan soporte.','2026-10-01','2026-10-06'),
   (6,'Conteo de tubería y materiales de torno','Plan estimado sujeto a responsables: verificar ubicación, unidad y equivalencias de longitudes, peso y piezas. Registrar material no catalogado y pendientes explícitos.','2026-09-29','2026-10-09'),
   (7,'Conteo de ensamble, varios y ubicaciones pendientes','Plan estimado: completar secciones restantes y validar ubicación de referencias sin clasificar. No tratar ausencia de registro como cantidad cero.','2026-10-01','2026-10-15'),
   (8,'Cerrar cobertura y reconteos del inventario','Plan estimado: verificar todas las secciones, duplicados, materiales fuera de Siigo y referencias sin conteo. Entregable: listado final validado y excepciones identificadas.','2026-10-13','2026-10-20'),
-  (9,'Conciliar Siigo vs. físico por lotes','Plan estimado: iniciar con pintura validada y sumar secciones cerradas. Alinear fecha de corte y movimientos; comparar cantidades y valores. Cierre posterior a cobertura y reconteos.','2026-10-02','2026-10-22'),
+  (9,'Conciliar Siigo vs. físico por secciones','Plan estimado: iniciar con pintura validada y sumar secciones cerradas. Alinear fecha de corte y movimientos; comparar cantidades y valores. Cierre posterior a cobertura y reconteos.','2026-10-02','2026-10-22'),
   (10,'Investigar causas de las diferencias','Plan estimado en paralelo con conciliación: rastrear entradas, consumos, devoluciones, traslados, unidades y soportes. Entregable: causa y tratamiento por diferencia.','2026-10-05','2026-10-29'),
   (11,'Depurar catálogo y unidades de medida','Plan estimado: resolver códigos duplicados, descripciones, unidades, ubicaciones y materiales agregados. Validar equivalencias antes de preparar ajustes.','2026-10-05','2026-11-06'),
   (12,'Revisar y aprobar ajustes de inventario','Plan estimado: consolidar diferencias justificadas, soportes y archivo de importación; aprobación del responsable antes de modificar Siigo. Depende del cierre de conciliación y depuración.','2026-11-03','2026-11-10'),
   (13,'Aplicar ajustes aprobados en Siigo','Plan estimado: registrar únicamente ajustes aprobados y conservar soportes y comprobantes. Este hito no autoriza ajustes automáticos en Siigo.','2026-11-11','2026-11-13'),
   (14,'Verificar saldos después del ajuste','Plan estimado: exportar saldos nuevos, comparar con inventario validado y movimientos posteriores al corte; resolver excepciones antes de aceptar la línea base.','2026-11-16','2026-11-18'),
   (15,'Diseñar entradas, salidas y traslados','Plan estimado en paralelo al conteo: definir registro oportuno de movimientos, responsables, soportes y tratamiento de consumos, devoluciones y materiales nuevos.','2026-09-29','2026-10-16'),
-  (16,'Pilotear el proceso en pintura','Plan estimado condicionado al cierre del lote de pintura: probar entradas, consumos y devoluciones con trazabilidad. Documentar errores y mejoras antes de extender el proceso.','2026-10-19','2026-10-30'),
+  (16,'Pilotear el proceso en pintura','Plan estimado condicionado al cierre del conteo de pintura: probar entradas, consumos y devoluciones con trazabilidad. Documentar errores y mejoras antes de extender el proceso.','2026-10-19','2026-10-30'),
   (17,'Estandarizar el proceso y capacitar responsables','Plan estimado: incorporar resultados del piloto; validar procedimiento, responsabilidades y capacitación para las demás secciones.','2026-11-02','2026-11-20'),
   (18,'Mejorar consulta y seguimiento del inventario','Plan estimado: partir de la app de conteo existente y validar consultas por código, sección y pendientes. Diferenciar avance de conteo de inventario operativo actualizado.','2026-10-19','2026-11-13'),
   (19,'Asegurar actualización y disponibilidad','Plan estimado: validar acceso de responsables, oportunidad de registro, respaldo y recuperación. Comprobar consistencia con saldos ajustados y movimientos reales.','2026-11-19','2026-12-04'),
@@ -96,3 +96,6 @@ $$;
 REVOKE ALL ON FUNCTION public.shift_gantt(date) FROM PUBLIC;
 GRANT EXECUTE ON FUNCTION public.shift_gantt(date) TO anon, authenticated;
 COMMIT;
+
+
+
